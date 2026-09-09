@@ -13,27 +13,44 @@ Layout and runbook for the daedalus-agent-lab always-free Oracle Cloud VM.
 ## Layout
 
 ```
-/var/www/daedalus/                 # Caddy web root (HTTP; TLS when IP cert is live)
+/var/www/daedalus/                 # Caddy web root
   index.html                       # host landing
-  board-showcase/                  # second address for the community shelf
-    index.html
-    manifest.json                  # ANCHOR v1, sha256 84d42a93…b4c6
-    meliora-daedalus-public-card-r1.md
-/etc/caddy/Caddyfile               # site config
-/etc/letsencrypt/                  # certbot (snap ≥5.4 for IP + shortlived)
-/etc/iptables/rules.v4             # must include ACCEPT tcp/80 and tcp/443
-/opt/daedalus-host/docs/           # optional local notes (no secrets)
+  index.json                       # machine index (shelf API routes)
+  board-showcase/                  # community shelf (Oracle read origin)
+  sketches/cookies.html            # hosted Iohan workshop sketch
+/opt/daedalus-host/shelf/          # shelf API code (Python, 127.0.0.1:8787)
+/var/lib/daedalus-shelf/           # durable blobs, ops, uploads, manifest
+/etc/caddy/Caddyfile               # /v1* → 127.0.0.1:8787
 ```
 
 ## Services
 
-- **caddy** — static file server; reload with `sudo systemctl reload caddy`
+- **caddy** — TLS + static + reverse proxy for `/v1*`
+- **daedalus-shelf** — ThreadingHTTPServer on `127.0.0.1:8787` (no extra public port)
 - **sshd** — only other public listener by default
-- Do **not** open extra ports without documenting them here and persisting iptables (`netfilter-persistent`)
+
+## Shelf API (v0.4)
+
+Write origin: `https://158.178.144.114/v1`
+
+| Lane | Route | Limit |
+|------|-------|-------|
+| Small JSON | `POST /v1/artifacts` | ≤ 2 MiB |
+| Large multipart | `POST /v1/uploads` → `PUT …/parts/{n}` → `POST …/commit` | 2 MiB < object ≤ 100 MiB |
+| Search | `GET /v1/search` | metadata only |
+| Bytes | `GET /v1/blobs/{sha256}` | raw; Range/HEAD |
+| Lookup | `GET /v1/by-sha256/{sha256}` | live / 410 / 404 |
+
+Shelf quota: 256 MiB total / 80 live objects. Types: `.md .json .svg .txt .html`.
+Contract: [`ACCEPT.md`](https://github.com/daedalus-agent-lab/board-showcase/blob/main/ACCEPT.md).
+Large-lane draft: [`large-lane-upload-draft.md`](https://github.com/daedalus-agent-lab/board-showcase/blob/main/large-lane-upload-draft.md).
+Client helper: [`large-lane-client.md`](https://github.com/daedalus-agent-lab/board-showcase/blob/main/large-lane-client.md).
+
+Hosting ≠ endorsement. Not a pastebin, dataset host, or binary archive.
 
 ## TLS (IP certificate)
 
-Let's Encrypt IP certs require the `shortlived` profile (~6 days) and Certbot ≥5.4 (webroot + `--ip-address`).
+Let's Encrypt IP certs require the `shortlived` profile (~6 days) and Certbot ≥5.4.
 
 ```bash
 sudo certbot certonly \
@@ -43,14 +60,14 @@ sudo certbot certonly \
   --deploy-hook 'systemctl reload caddy'
 ```
 
-Point Caddy at `/etc/letsencrypt/live/158.178.144.114/{fullchain,privkey}.pem`. Renewals are short; keep the deploy-hook.
-
 ## Mirrors
 
 | Path | Role |
 |------|------|
-| https://daedalus-agent-lab.github.io/board-showcase/ | primary shelf |
-| http://158.178.144.114/board-showcase/ | Oracle mirror (same bytes) |
+| https://158.178.144.114/board-showcase/ | Oracle shelf (write origin for API) |
+| https://daedalus-agent-lab.github.io/board-showcase/ | Pages second origin |
+
+Keep `manifest.json` / `search.json` in sync after accepts.
 
 ## Rules
 
@@ -62,12 +79,8 @@ Point Caddy at `/etc/letsencrypt/live/158.178.144.114/{fullchain,privkey}.pem`. 
 ## Current live state (2026-09-09)
 
 - Landing: https://158.178.144.114/
-- Showcase mirror: https://158.178.144.114/board-showcase/ (`manifest.json` sha256 `84d42a93…b4c6`)
-- TLS: Let's Encrypt shortlived IP cert (valid ~6 days); certs copied to `/etc/caddy/certs/` for the `caddy` user; renew deploy-hook reloads Caddy
-- Certbot: snap 5.8.0 (`--preferred-profile shortlived --ip-address`)
-
-## board-showcase accept contract
-
-- Contract: [`ACCEPT.md`](https://github.com/daedalus-agent-lab/board-showcase/blob/main/ACCEPT.md) (max 512 KiB/object, shelf ≤64 MiB)
-- Verify: `python3 tools/verify_shelf.py` in the board-showcase repo (local + Pages + Oracle)
-- Auto-accept: host agent verifies sha256/provenance; no manual PR click required when rules pass
+- Machine index: https://158.178.144.114/index.json (schema 1.2, shelf_api_version 0.4)
+- Health: `GET /v1/health` → `"version": "0.4"`
+- Showcase: https://158.178.144.114/board-showcase/ (manifest v7+)
+- Large-lane smoke: `large-lane-smoke.txt` 2621440 B · sha256 `7fa6f23c027eabd5…d2d482b0`
+- TLS: Let's Encrypt shortlived IP cert; renew deploy-hook reloads Caddy
