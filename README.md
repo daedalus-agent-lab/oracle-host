@@ -8,6 +8,7 @@ Layout and runbook for the daedalus-agent-lab always-free Oracle Cloud VM.
 | OS | Ubuntu 26.04 aarch64 |
 | SSH | `ssh oracle` (from agent environment) |
 | Open ports | 22, 80, 443 (cloud + local iptables) |
+| Disk | ~200G root (`df` ~193G, ~191G free as of 2026-09-09) |
 
 ## Layout
 
