@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A playful integer-remainder cookie sharing toy.">
-<title>Cookie sharing table</title>
+<meta name="description" content="Эскиз: пачка печенья на стол, целый остаток. CC0.">
+<title>Печенье на столе</title>
 <style>
   :root {
     --ink: #20233B;
@@ -136,44 +136,44 @@
 <body>
 <main class="page" id="page">
   <header class="masthead">
-    <p class="kicker">Cookie sharing toy</p>
-    <h1>Three plates. One leftover dish.</h1>
-    <p class="intro">Share cookies equally. Then add one visible pack and watch what cannot be shared.</p>
+    <p class="kicker">Эскиз остатка</p>
+    <h1>Добавляйте пачки, чтобы всем досталось поровну</h1>
+    <p class="intro">Три тарелки и блюдо для остатка. Пачка из четырёх видна до клика. Если поровну не делится — лишнее лежит отдельно.</p>
   </header>
 
   <section class="sharing-table" aria-labelledby="table-title">
     <div class="table-inner">
       <div class="table-head">
-        <h2 id="table-title">The sharing table</h2>
-        <p class="status" id="status">Everyone has an equal plate.</p>
+        <h2 id="table-title">Стол</h2>
+        <p class="status" id="status">Всем поровну, остатка нет.</p>
       </div>
-      <div class="stats" aria-label="Sharing counts">
-        <div class="stat"><span class="stat-name">Cookies</span><strong class="stat-value" id="total">12</strong></div>
-        <div class="stat"><span class="stat-name">People</span><strong class="stat-value">3</strong></div>
-        <div class="stat"><span class="stat-name">Each plate</span><strong class="stat-value" id="each">4</strong></div>
-        <div class="stat"><span class="stat-name">Leftover</span><strong class="stat-value" id="remainder">0</strong></div>
+      <div class="stats" aria-label="Счёт">
+        <div class="stat"><span class="stat-name">Печенье</span><strong class="stat-value" id="total">12</strong></div>
+        <div class="stat"><span class="stat-name">Люди</span><strong class="stat-value">3</strong></div>
+        <div class="stat"><span class="stat-name">На тарелке</span><strong class="stat-value" id="each">4</strong></div>
+        <div class="stat"><span class="stat-name">Остаток</span><strong class="stat-value" id="remainder">0</strong></div>
       </div>
 
-      <div class="scene" aria-label="Three plates and a leftover dish">
-        <div class="pack-zone" aria-label="One pack contains four cookies">
-          <span class="pack-label">One pack</span>
+      <div class="scene" aria-label="Три тарелки и блюдо для остатка">
+        <div class="pack-zone" aria-label="Пачка из четырёх печений">
+          <span class="pack-label">Пачка</span>
           <div class="pack-sleeve" aria-hidden="true"><span class="cookie"></span><span class="cookie"></span><span class="cookie"></span><span class="cookie"></span></div>
-          <p class="pack-caption">4 cookies, ready to add</p>
+          <p class="pack-caption">4 печенья, готовы добавить</p>
         </div>
-        <div class="serving"><span class="serving-name">Ava’s plate</span><div class="plate" id="plate-1" aria-label="Ava has 4 cookies"></div><span class="serving-count"><strong id="count-1">4</strong> cookies</span></div>
-        <div class="serving"><span class="serving-name">Bo’s plate</span><div class="plate" id="plate-2" aria-label="Bo has 4 cookies"></div><span class="serving-count"><strong id="count-2">4</strong> cookies</span></div>
-        <div class="serving"><span class="serving-name">Cy’s plate</span><div class="plate" id="plate-3" aria-label="Cy has 4 cookies"></div><span class="serving-count"><strong id="count-3">4</strong> cookies</span></div>
-        <div class="serving leftover"><span class="serving-name">Leftover dish</span><div class="plate dish" id="leftover-dish" aria-label="Leftover: none left over"></div><span class="serving-count" id="leftover-copy">none left over</span></div>
+        <div class="serving"><span class="serving-name">Тарелка Ани</span><div class="plate" id="plate-1" aria-label="У Ани 4 печенья"></div><span class="serving-count" id="label-1"><strong id="count-1">4</strong> печенья</span></div>
+        <div class="serving"><span class="serving-name">Тарелка Бори</span><div class="plate" id="plate-2" aria-label="У Бори 4 печенья"></div><span class="serving-count" id="label-2"><strong id="count-2">4</strong> печенья</span></div>
+        <div class="serving"><span class="serving-name">Тарелка Киры</span><div class="plate" id="plate-3" aria-label="У Киры 4 печенья"></div><span class="serving-count" id="label-3"><strong id="count-3">4</strong> печенья</span></div>
+        <div class="serving leftover"><span class="serving-name">Блюдо для остатка</span><div class="plate dish" id="leftover-dish" aria-label="Остаток: нет"></div><span class="serving-count" id="leftover-copy">остатка нет</span></div>
       </div>
 
       <div class="actions">
-        <button class="action primary" type="button" id="add">Add a pack of 4 cookies</button>
-        <button class="action secondary" type="button" id="undo" disabled>Undo</button>
-        <p class="action-help">The pack stays four cookies. It does not change while you share.</p>
+        <button class="action primary" type="button" id="add">Положить пачку из 4</button>
+        <button class="action secondary" type="button" id="undo" disabled>Отменить пачку</button>
+        <p class="action-help">Пачка всегда из четырёх. Размер не меняется молча.</p>
       </div>
       <details>
-        <summary>How the sharing works</summary>
-        <p class="math" id="math">The quiet math: <code>12 = 3 × 4 + 0</code>. The remainder is always a whole number from 0 to 2.</p>
+        <summary>Как считается</summary>
+        <p class="math" id="math">Тихая формула: <code>12 = 3 × 4 + 0</code>. Остаток — целое от 0 до 2. CC0, v5.1 калькулятор не тронут.</p>
       </details>
     </div>
   </section>
@@ -185,8 +185,16 @@
   const PACK = 4;
   const START = 12;
   const MAX_DRAWN = 8;
+  const NAMES = ['Аня', 'Боря', 'Кира'];
   let total = START;
   let previousEach = Math.floor(total / PEOPLE);
+  const history = [];
+  const wordCookies = (n) => {
+    const m10 = n % 10, m100 = n % 100;
+    if (m10 === 1 && m100 !== 11) return n + ' печенье';
+    if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return n + ' печенья';
+    return n + ' печений';
+  };
 
   const byId = (id) => document.getElementById(id);
   const cookie = (newCookie = false) => {
@@ -200,7 +208,7 @@
     if (!count) {
       const note = document.createElement('span');
       note.className = 'empty-note';
-      note.textContent = 'none left over';
+      note.textContent = 'остатка нет';
       element.append(note);
       return;
     }
@@ -215,30 +223,32 @@
     byId('each').textContent = each;
     byId('remainder').textContent = leftover;
     ['1', '2', '3'].forEach((number) => {
-      byId(`count-${number}`).textContent = each;
+      byId(`label-${number}`).innerHTML = `<strong id="count-${number}">${each}</strong> ${wordCookies(each).split(' ').slice(1).join(' ')}`;
       const plate = byId(`plate-${number}`);
-      plate.setAttribute('aria-label', `${['Ava', 'Bo', 'Cy'][Number(number) - 1]} has ${each} cookies`);
+      plate.setAttribute('aria-label', `У ${NAMES[Number(number) - 1]} ${wordCookies(each)}`);
       fillDish(plate, each, adding && each > previousEach);
     });
     const dish = byId('leftover-dish');
-    dish.setAttribute('aria-label', leftover ? `Leftover: ${leftover} cookie` : 'Leftover: none left over');
+    dish.setAttribute('aria-label', leftover ? `Остаток: ${wordCookies(leftover)}` : 'Остаток: нет');
     fillDish(dish, leftover, adding && leftover > 0);
-    byId('leftover-copy').textContent = leftover ? `${leftover} cookie left over` : 'none left over';
-    byId('math').innerHTML = `The quiet math: <code>${total} = ${PEOPLE} × ${each} + ${leftover}</code>. The remainder is always a whole number from 0 to ${PEOPLE - 1}.`;
-    byId('status').textContent = leftover ? 'One cookie cannot be shared equally.' : 'Everyone has an equal plate.';
-    byId('undo').disabled = total === START;
-    if (announce) byId('announcer').textContent = `${total} cookies: each plate has ${each}; ${leftover ? `${leftover} cookie is left over` : 'none are left over'}.`;
+    byId('leftover-copy').textContent = leftover ? wordCookies(leftover) + ' в остатке' : 'остатка нет';
+    byId('math').innerHTML = `Тихая формула: <code>${total} = ${PEOPLE} × ${each} + ${leftover}</code>. Остаток — целое от 0 до ${PEOPLE - 1}. CC0, v5.1 калькулятор не тронут.`;
+    byId('status').textContent = leftover ? 'Одно печенье нельзя разделить поровну.' : 'Всем поровну, остатка нет.';
+    byId('undo').disabled = history.length === 0;
+    if (announce) byId('announcer').textContent = `${wordCookies(total)}: на тарелке ${each}; ${leftover ? wordCookies(leftover) + ' в остатке' : 'остатка нет'}.`;
     previousEach = each;
   };
   byId('add').addEventListener('click', () => {
-    total = START + PACK;
+    history.push(total);
+    total += PACK;
     byId('page').classList.remove('confirmed');
     void byId('page').offsetWidth;
     byId('page').classList.add('confirmed');
     render(true);
   });
   byId('undo').addEventListener('click', () => {
-    total = START;
+    if (!history.length) return;
+    total = history.pop();
     render(true);
   });
   render();
