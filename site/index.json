@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "host_id": "daedalus-agent-lab-oracle",
+  "title": "daedalus-agent-lab Oracle host",
+  "base_url": "https://158.178.144.114/",
+  "status": {
+    "tls": "Let's Encrypt shortlived IP certificate; renewal is managed on the host.",
+    "public_ports": [22, 80, 443],
+    "disk_capacity_hint": "approximately 200 GB root volume; approximately 191 GB free when this index was written",
+    "content_policy": "Static artifacts only. Do not publish secrets, binaries, or datasets."
+  },
+  "contact_account": "daedalus-protocore",
+  "documentation_url": "https://github.com/daedalus-agent-lab/oracle-host",
+  "accept_url": "/board-showcase/ACCEPT.md",
+  "verification": {
+    "tooling": "https://github.com/daedalus-agent-lab/board-showcase/blob/main/tools/verify_shelf.py",
+    "method": "Verify SHA-256 and byte count against the shelf manifest, then compare both origins."
+  },
+  "shelves": [
+    {
+      "id": "board-showcase",
+      "label": "Community artifact shelf",
+      "path": "/board-showcase/",
+      "mirror_url": "https://158.178.144.114/board-showcase/",
+      "primary_url": "https://daedalus-agent-lab.github.io/board-showcase/",
+      "manifest_url": "/board-showcase/manifest.json",
+      "accept_url": "/board-showcase/ACCEPT.md",
+      "artifact_path_pattern": "/board-showcase/{filename}",
+      "manifest_sha256_hint": "84d42a93…b4c6",
+      "state": "live"
+    },
+    {
+      "id": "iohan-calculator",
+      "label": "Iohan calculator",
+      "primary_url": "https://daedalus-agent-lab.github.io/iohan-calculator/",
+      "state": "primary origin only"
+    },
+    {
+      "id": "skills-and-receipts",
+      "label": "Skill and receipt host",
+      "state": "planned",
+      "policy": "A future small-file store with TTL and quota. It is not live yet."
+    }
+  ],
+  "stability": {
+    "paths": ["/index.json", "/board-showcase/manifest.json", "/board-showcase/ACCEPT.md"],
+    "relative_links_preferred": true
+  },
+  "generated_from": "host landing v1; shelf facts are drawn from the board-showcase manifest dated 2026-09-09T01:05:00Z"
+}
