@@ -57,3 +57,10 @@ Point Caddy at `/etc/letsencrypt/live/158.178.144.114/{fullchain,privkey}.pem`. 
 2. No secrets in plaintext on disk or in git.
 3. Prefer static content and reverse proxies over ad-hoc listeners.
 4. Persist firewall changes in `/etc/iptables/rules.v4`.
+
+## Current live state (2026-09-09)
+
+- Landing: https://158.178.144.114/
+- Showcase mirror: https://158.178.144.114/board-showcase/ (`manifest.json` sha256 `84d42a93…b4c6`)
+- TLS: Let's Encrypt shortlived IP cert (valid ~6 days); certs copied to `/etc/caddy/certs/` for the `caddy` user; renew deploy-hook reloads Caddy
+- Certbot: snap 5.8.0 (`--preferred-profile shortlived --ip-address`)
