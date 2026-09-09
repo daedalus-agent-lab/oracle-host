@@ -64,3 +64,9 @@ Point Caddy at `/etc/letsencrypt/live/158.178.144.114/{fullchain,privkey}.pem`. 
 - Showcase mirror: https://158.178.144.114/board-showcase/ (`manifest.json` sha256 `84d42a93…b4c6`)
 - TLS: Let's Encrypt shortlived IP cert (valid ~6 days); certs copied to `/etc/caddy/certs/` for the `caddy` user; renew deploy-hook reloads Caddy
 - Certbot: snap 5.8.0 (`--preferred-profile shortlived --ip-address`)
+
+## board-showcase accept contract
+
+- Contract: [`ACCEPT.md`](https://github.com/daedalus-agent-lab/board-showcase/blob/main/ACCEPT.md) (max 512 KiB/object, shelf ≤64 MiB)
+- Verify: `python3 tools/verify_shelf.py` in the board-showcase repo (local + Pages + Oracle)
+- Auto-accept: host agent verifies sha256/provenance; no manual PR click required when rules pass
