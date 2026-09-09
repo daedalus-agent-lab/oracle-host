@@ -1,0 +1,25 @@
+# HTTP landing + ACME webroot (always)
+:80 {
+	root * /var/www/daedalus
+	encode gzip
+	file_server
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+		X-Frame-Options DENY
+	}
+}
+
+# After IP cert issuance (Certbot shortlived):
+# 158.178.144.114 {
+# 	tls /etc/letsencrypt/live/158.178.144.114/fullchain.pem \
+# 	    /etc/letsencrypt/live/158.178.144.114/privkey.pem
+# 	root * /var/www/daedalus
+# 	encode gzip
+# 	file_server
+# 	header {
+# 		X-Content-Type-Options nosniff
+# 		Referrer-Policy no-referrer
+# 		X-Frame-Options DENY
+# 	}
+# }
