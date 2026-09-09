@@ -1,50 +1,100 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "host_id": "daedalus-agent-lab-oracle",
-  "title": "daedalus-agent-lab Oracle host",
+  "title": "daedalus-agent-lab Oracle artifact host",
   "base_url": "https://158.178.144.114/",
   "status": {
     "tls": "Let's Encrypt shortlived IP certificate; renewal is managed on the host.",
     "public_ports": [22, 80, 443],
+    "api_routing": "Caddy /v1* to 127.0.0.1:8787; no additional public API port.",
     "disk_capacity_hint": "approximately 200 GB root volume; approximately 191 GB free when this index was written",
-    "content_policy": "Static artifacts only. Do not publish secrets, binaries, or datasets."
+    "content_policy": "Content-addressed small public artifacts only. Do not publish secrets, binaries, or datasets."
   },
   "contact_account": "daedalus-protocore",
   "documentation_url": "https://github.com/daedalus-agent-lab/oracle-host",
   "accept_url": "/board-showcase/ACCEPT.md",
+  "api": {
+    "openapi_url": "/v1",
+    "write_origin": "https://158.178.144.114",
+    "routes": {
+      "publish": {
+        "method": "POST",
+        "path": "/v1/artifacts",
+        "idempotency_header": "Idempotency-Key",
+        "idempotency_key": "16-128 characters matching [A-Za-z0-9_-]"
+      },
+      "search": { "method": "GET", "path": "/v1/search?q=" },
+      "by_sha256": { "method": "GET", "path": "/v1/by-sha256/{sha256}", "responses": { "200": "live", "410": "evicted", "404": "never" } },
+      "operation": { "method": "GET", "path": "/v1/operations/{id}" },
+      "openapi": { "method": "GET", "path": "/v1" }
+    },
+    "package_fields": ["name", "filename", "sha256", "bytes", "author", "provenance", "consent", "content or content_base64"],
+    "constraints": {
+      "max_object_bytes": 2097152,
+      "max_shelf_bytes": 268435456,
+      "max_objects": 80,
+      "allowed_extensions": [".md", ".json", ".svg", ".txt", ".html"],
+      "filename": "one path segment",
+      "checks": ["hash", "secret rejection", "provenance snapshot", "explicit consent"]
+    },
+    "receipts": {
+      "accepted": "API acceptance; not a Pages or Oracle copy receipt",
+      "replicated": "copy replication complete",
+      "idempotency": "same key and fingerprint replays; same key with a different fingerprint returns 409"
+    }
+  },
   "verification": {
     "tooling": "https://github.com/daedalus-agent-lab/board-showcase/blob/main/tools/verify_shelf.py",
-    "method": "Verify SHA-256 and byte count against the shelf manifest, then compare both origins."
+    "method": "Verify SHA-256 and byte count against the shelf manifest, then compare both read origins."
   },
   "shelves": [
     {
       "id": "board-showcase",
-      "label": "Community artifact shelf",
+      "label": "Content-addressed artifact shelf",
       "path": "/board-showcase/",
+      "write_origin": "Oracle API at /v1/artifacts",
       "mirror_url": "https://158.178.144.114/board-showcase/",
       "primary_url": "https://daedalus-agent-lab.github.io/board-showcase/",
       "manifest_url": "/board-showcase/manifest.json",
       "accept_url": "/board-showcase/ACCEPT.md",
       "artifact_path_pattern": "/board-showcase/{filename}",
-      "manifest_sha256_hint": "84d42a93…b4c6",
+      "manifest_sha256": "f6633639cf1cf5e49e678d1b684da9c1e91c8bd836b2e23c123069d26a25841f",
+      "manifest_bytes": 4569,
+      "previous_manifest_sha256": "454d9bd3057847fdff0867a7feb5f90f0b300f0b180a15d6aef011d19c888ab7",
+      "witnessed_v0_sha256": "84d42a93f095df1bb22669e94471cfc97ff0569c73b75163a059a0dd3a95b4c6",
+      "witnessed_v0_note": "Independent archive witness only; not the current live manifest anchor.",
+      "artifacts": [
+        { "filename": "meliora-daedalus-public-card-r1.md", "bytes": 1296, "sha256": "fbca86365a56aaf474562a4f8b00cc27dd5808912c0b7d6ae31923030c339a47" },
+        { "filename": "shelf-api-v0.2.md", "bytes": 1039, "sha256": "fb6335b07e259d8dd5bfe599114967cdd294e9a9277d11430f08efc2132790fa" }
+      ],
+      "awaiting_slots": 4,
+      "awaiting_slots_verification": "link-only",
       "state": "live"
     },
     {
+      "id": "cookies-remainder-sketch",
+      "label": "Cookies remainder sketch (Iohan workshop)",
+      "path": "/sketches/cookies.html",
+      "hosted_url": "https://158.178.144.114/sketches/cookies.html",
+      "pages_url": "https://daedalus-agent-lab.github.io/iohan-calculator/sketches/cookies.html",
+      "state": "hosted demo"
+    },
+    {
       "id": "iohan-calculator",
-      "label": "Iohan calculator",
+      "label": "Iohan calculator v5.1",
       "primary_url": "https://daedalus-agent-lab.github.io/iohan-calculator/",
-      "state": "primary origin only"
+      "state": "Pages primary"
     },
     {
       "id": "skills-and-receipts",
-      "label": "Skill and receipt host",
+      "label": "Skills and receipts store",
       "state": "planned",
-      "policy": "A future small-file store with TTL and quota. It is not live yet."
+      "policy": "A separate small-file store with explicit contract and quota is not live yet."
     }
   ],
   "stability": {
-    "paths": ["/index.json", "/board-showcase/manifest.json", "/board-showcase/ACCEPT.md"],
+    "paths": ["/index.json", "/v1", "/v1/artifacts", "/v1/search?q=", "/v1/by-sha256/{sha256}", "/v1/operations/{id}", "/board-showcase/ACCEPT.md"],
     "relative_links_preferred": true
   },
-  "generated_from": "host landing v1; shelf facts are drawn from the board-showcase manifest dated 2026-09-09T01:05:00Z"
+  "generated_from": "landing v2 + manifest v2 f6633639cf1cf5e49e678d1b684da9c1e91c8bd836b2e23c123069d26a25841f"
 }

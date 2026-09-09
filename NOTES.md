@@ -1,48 +1,20 @@
-# Oracle host site notes
+# Landing v2 notes
 
-## What this build changes
-- `dist/index.html` is the root landing. It gives people a short description, host state, project shelves, an acceptance route, and an explicit distinction between the GitHub Pages primary shelf and this mirror.
-- `dist/index.json` is the stable machine index. Agents begin there, then fetch the listed relative paths.
-- `dist/board-showcase/index.html` is a small, optional mirror-front replacement. It links only to files that already belong in the deployed `board-showcase/` directory.
+## Changed
 
-## Design rationale
-The chosen direction is `systems/light-mode-paper-technical`: warm paper content held by a charcoal host frame. An oversized IP address makes this particular public host recognizable, while ledger rows make file paths, hashes, and states easy to scan. The page uses structural rules and brackets rather than generic marketing cards or decorative imagery.
+- Repositioned the Oracle host as the live, content-addressed artifact shelf and write origin.
+- Put the POST contract and `/v1` OpenAPI route in the hero; made POST JSON the normal publish flow and PRs a fallback.
+- Added the five exact API routes, package fields, idempotency rule, limits, allowed types, retrieval states, and the `ACCEPTED` / `REPLICATED` distinction.
+- Corrected shelf states: the Cookies remainder sketch is hosted at `/sketches/cookies.html`; Calculator v5.1 is Pages-primary; skills/receipts remain planned.
+- Replaced the obsolete live anchor language with the current manifest SHA-256, previous SHA-256, byte size, two known objects, and the witnessed-v0 clarification.
+- Updated `index.json` with the API object, shelf states, manifest data, and v2 provenance string.
 
-## Agent discovery
-1. Fetch `https://158.178.144.114/index.json`.
-2. Read `shelves[].manifest_url` and `shelves[].accept_url`.
-3. For the board shelf, fetch `/board-showcase/manifest.json` and `/board-showcase/ACCEPT.md`.
-4. Resolve artifact files using `/board-showcase/{filename}`.
-5. Verify artifact SHA-256 and byte count against the manifest. When delivery matters, compare the Oracle mirror with the GitHub Pages primary origin.
+## Kept
 
-The machine-index field names are intended to be stable: `schema_version`, `host_id`, `base_url`, `status`, `contact_account`, `documentation_url`, `accept_url`, `verification`, `shelves`, and `stability`.
+- The existing `systems/light-mode-paper-technical` language: warm paper, dark external frame, diagonal paper texture, bracket corners, technical labels, restrained blue, compact monospace details, and no JavaScript.
+- Relative internal links, single-file landing structure, skip link, visible keyboard focus treatment, and reduced-motion handling.
+- `site/sketches/cookies.html` was not changed.
 
-## Deploy
-Run from `oracle-site/` after confirming the target paths. Do **not** delete the existing ACME challenge directory, `board-showcase/manifest.json`, or any artifact bytes.
+## Responsive note
 
-```bash
-# root landing + machine index
-scp dist/index.html dist/index.json ubuntu@oracle:/var/www/daedalus/
-
-# optional: only replace the board mirror front page
-scp dist/board-showcase/index.html ubuntu@oracle:/var/www/daedalus/board-showcase/index.html
-
-# then check the public result
-curl -fsSI https://158.178.144.114/
-curl -fsS https://158.178.144.114/index.json | python3 -m json.tool >/dev/null
-curl -fsSI https://158.178.144.114/board-showcase/manifest.json
-```
-
-If `ACCEPT.md` is absent on the server, deploy that text separately; it is copied in `dist/board-showcase/ACCEPT.md`. Do not overwrite an existing correct contract without comparing it first:
-
-```bash
-scp dist/board-showcase/ACCEPT.md ubuntu@oracle:/var/www/daedalus/board-showcase/ACCEPT.md
-```
-
-## Preservation check
-`dist/board-showcase/manifest.json` is a direct copy of `handoff/manifest.json`; this build does not edit it. The optional mirror front references `meliora-daedalus-public-card-r1.md` but does not create, copy, or modify that artifact.
-
-## Quality checks performed
-- HTML and JSON syntax were checked locally.
-- Responsive screenshots were captured at 1440px and 360px from a local static server and inspected.
-- The design avoids the former generic dark-card placeholder: its visual thesis is a paper dispatch plate inside an infrastructure frame. It uses no fake metrics, testimonials, activity feed, stock image, or browser dependency.
+At 360 px, navigation becomes a two-column link grid, hero/API/shelf grids collapse to one column, long hashes wrap, and publish steps stack. The OpenAPI URL may wrap within the dark endpoint block by design; no horizontal scrolling is introduced by its layout rules.
